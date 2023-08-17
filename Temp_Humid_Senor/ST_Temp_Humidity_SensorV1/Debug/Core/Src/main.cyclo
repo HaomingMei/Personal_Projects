@@ -1,0 +1,10 @@
+../Drivers/CMSIS/Include/core_cm4.h:2064:26:ITM_SendChar	4
+../Core/Src/main.c:78:5:_write	2
+../Core/Src/main.c:93:5:main	1
+../Core/Src/main.c:159:6:SystemClock_Config	3
+../Core/Src/main.c:207:13:MX_I2C1_Init	2
+../Core/Src/main.c:241:13:MX_UART4_Init	2
+../Core/Src/main.c:274:13:MX_GPIO_Init	1
+../Core/Src/main.c:315:6:deleteFirstElement	3
+../Core/Src/main.c:325:6:deleteThree_Resize	3
+../Core/Src/main.c:381:6:Error_Handler	1
