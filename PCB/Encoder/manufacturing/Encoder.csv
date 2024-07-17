@@ -1,0 +1,5 @@
+"Reference","Value","Datasheet","Footprint","Qty","DNP"
+"C1","100n","~","Capacitor_SMD:C_0805_2012Metric","1",""
+"C2","4.7uF","~","Capacitor_SMD:C_0805_2012Metric","1",""
+"J1","1-1734595-0 Header","1-1734595-0","ConnectorCustom:CON10_1X10_DUM_HPI_TYC","1",""
+"U1","AS5047P-ATSM","https://look.ams-osram.com/m/d05ee39221f9857/original/AS5047P-DS000324.pdf","AngleSensor:TSSOP14_OSM","1",""
