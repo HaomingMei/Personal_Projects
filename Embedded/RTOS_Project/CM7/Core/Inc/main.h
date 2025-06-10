@@ -31,7 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define LCD_FB_START_ADDRESS 0xD0000000
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
