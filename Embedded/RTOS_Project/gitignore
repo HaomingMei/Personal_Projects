@@ -37,6 +37,9 @@ Build/
 
 # CubeIDE-specific build folders under CM4/CM7
 # (But “Debug/” alone will match any Debug dir at any level.)
+RTOS_Project_CM7/Debug/
+RTOS_Project_CM4/Debug/
+
 
 # ===== Configuration or environment files =====
 *.settings.xml
