@@ -1,0 +1,47 @@
+# ===== IDE and OS junk =====
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+
+# Eclipse/STM32CubeIDE / other IDE metadata
+.metadata/
+.settings/
+RemoteSystemsTempFiles/
+.vscode/
+*.launch
+
+# ===== Build output =====
+# Generic object and binary files
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.axf
+*.out
+
+# Makefile-generated artifacts
+objects.mk
+objects.list
+sources.mk
+
+# Build folders - these patterns match directories named Debug, Release, Binaries anywhere
+Debug/
+Release/
+Binaries/
+build/
+Build/
+
+# CubeIDE-specific build folders under CM4/CM7
+# (But “Debug/” alone will match any Debug dir at any level.)
+
+# ===== Configuration or environment files =====
+*.settings.xml
+*.env
+
+# ===== Logs and temp =====
+*.log
+*.tmp
