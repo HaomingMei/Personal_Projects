@@ -1,84 +1,45 @@
-# ================= OS & Editor metadata (global) =================
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
 
-# macOS
-.DS_Store
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
 
-# Windows
-Thumbs.db
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
 
-# Common IDE folders/settings
-# Eclipse / STM32CubeIDE metadata (may appear under various projects)
-**/.metadata/
-**/.settings/
-**/RemoteSystemsTempFiles/
-# VSCode
-**/.vscode/
-# Launch files
-**/*.launch
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
 
-# ================= Generic build outputs =================
+# Misc
+*.map
+*.m
+*.png
 
-# Ignore any Debug/ or Release/ folder anywhere in the repo
-**/Debug/
-**/Release/
-**/Binaries/
-**/build/
-**/Build/
+# Eclipse CDT project files
+.cproject
+.project
+.settings/
 
-# Ignore typical compiled artifacts anywhere under the repo
-**/*.o
-**/*.obj
-**/*.elf
-**/*.bin
-**/*.hex
-**/*.map
-**/*.list
-**/*.axf
-**/*.out
+# Vagrant directory
+.vagrant/
 
-# Makefile-generated lists
-**/objects.mk
-**/objects.list
-**/sources.mk
+# Include makefiles
+!Makefile
+*~
 
-# ================= RTOS_Project-specific ignores =================
-
-# If your RTOS project is at Embedded/RTOS_Project:
-# Ignore CM4 and CM7 build folders specifically:
-Embedded/RTOS_Project/CM4/Debug/
-Embedded/RTOS_Project/CM4/Release/
-Embedded/RTOS_Project/CM7/Debug/
-Embedded/RTOS_Project/CM7/Release/
-
-# You can also ignore any Debug/Release anywhere under RTOS_Project:
-Embedded/RTOS_Project/**/Debug/
-Embedded/RTOS_Project/**/Release/
-# And ignore compiled artifacts under RTOS_Project (though generic patterns above catch these):
-Embedded/RTOS_Project/**/*.o
-Embedded/RTOS_Project/**/*.elf
-Embedded/RTOS_Project/**/*.map
-# (Add more if you have other build artifacts specific to RTOS_Project)
-
-# ================= Configuration / environment files =================
-
-# e.g. IDE settings you do not want in Git
-**/*.settings.xml
-**/*.env
-
-# ================= Logs / temp =================
-
-**/*.log
-**/*.tmp
-
-# ================= Optional: ignore other workspace-level files =================
-
-# If you have other folders in the monorepo that produce build outputs or IDE metadata:
-# For example, if you have multiple embedded projects under Embedded/, you may add patterns:
-# Embedded/AnotherProject/**/Debug/
-# Embedded/AnotherProject/**/Release/
-
-# ================= Note on Drivers or source code =================
-# We assume you WANT to commit your source and driver folders under Embedded/RTOS_Project.
-# Therefore, do NOT include patterns like Embedded/RTOS_Project/CM4/Drivers/ or Drivers/ in ignore.
-# If other subfolders produce generated files you do want to ignore, add them here explicitly.
-
+# Libraries
+/lib
