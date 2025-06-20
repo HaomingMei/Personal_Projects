@@ -256,9 +256,13 @@ uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb)
 void HAL_MPU_Disable(void)
 {
   /* Make sure outstanding transfers are done */
-  __DMB();
+  __DMB(); // Prevent changing access permissions for memory
+  // regions accessed (if we are changing it now)
 
   /* Disable fault exceptions */
+  // Incase previous/current registers got garbo value
+  // We disable fault exceptions for now
+
   SCB->SHCSR &= ~SCB_SHCSR_MEMFAULTENA_Msk;
 
   /* Disable the MPU and clear the control register*/
