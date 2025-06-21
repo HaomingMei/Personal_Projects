@@ -26,7 +26,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+static RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct; // Struct used to set the clock configuration for the LTDC display controller
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -35,7 +35,7 @@
 #ifndef HSEM_ID_0
 #define HSEM_ID_0 (0U) /* HW semaphore 0*/
 #endif
-
+#define FOUR_MB (4UL*1024*1024)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -66,7 +66,7 @@ static void MX_FMC_Init(void);
 /* USER CODE BEGIN 0 */
 static void MPU_Init(void);
 static void Cache_Init(void);
-
+static void LCD_Init(void);
 /* USER CODE END 0 */
 
 /**
@@ -134,6 +134,8 @@ int main(void)
   MX_FMC_Init();
   /* USER CODE BEGIN 2 */
 	BSP_SDRAM_Init(0); // Initialize the FMC (MCU) and SDRAM Registers
+
+	LCD_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -366,9 +368,7 @@ void MPU_Init(void) {
 	// memory region we are about to change the configuration for
 	for (int i = 0; i < 2; i++) {
 		// (RBAR Register)
-		MPU_InitStruct.BaseAddress = (i == 0) ?
-		LCD_FB_START_ADDRESS :
-												LCD_FB_START_ADDRESS + FOUR_MB;
+		MPU_InitStruct.BaseAddress = (i == 0) ? LCD_FB_START_ADDRESS : LCD_FB_START_ADDRESS + FOUR_MB;
 		// (RNR Register)
 		MPU_InitStruct.Number = MPU_REGION_NUMBER1 + i; // Used to keep track of the configuration by "Region Number"
 		// (RASR Register)
@@ -407,6 +407,30 @@ void Cache_Init(void) {
 	// Enabling Data Cache
 	SCB_EnableDCache();
 
+}
+
+
+void LCD_Init(void){
+
+	//BSP_LCD_Reset(0);
+	// We keep track of these information so the hardware can switch to the most optimal
+	// filter(capacitor) configuration, ensuring that the PLL output is as stable as possible
+	PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC;
+	PeriphClkInitStruct.PLL3.PLL3M = 5; // Integer Divider
+	PeriphClkInitStruct.PLL3.PLL3N = 56; // Integer Multipler
+	PeriphClkInitStruct.PLL3.PLL3FRACN = 0; // FRACN/8192 + N for the N multipler, not used
+
+	//* When Updating the LTDC Peripheral Clock, we specify that we are updating the R, the others are updated in
+	//* configuration by registers but the state of the clk output for them are in the old state
+	//* We ensure that we enable the CLKout for R
+	PeriphClkInitStruct.PLL3.PLL3P = 2; // Unused for now
+	PeriphClkInitStruct.PLL3.PLL3Q = 2; // Unused for now
+	PeriphClkInitStruct.PLL3.PLL3R = 6; // Used
+	PeriphClkInitStruct.PLL3.PLL3RGE = RCC_PLL3VCIRANGE_2;// PLL3 Clock Input Frequency Range (post M) 25Mhz/5 is 5
+	PeriphClkInitStruct.PLL3.PLL3VCOSEL = RCC_PLL3VCOMEDIUM; // PLL3 Clock Output Freq Range 5Mhz * 56 = 280Mhz
+
+	// Functions wants a pointer, so we take the address to give the pointer to the InitStruct
+	HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 }
 /* USER CODE END 4 */
 
