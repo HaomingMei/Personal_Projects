@@ -1,24 +1,23 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -59,13 +58,14 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_FMC_Init(void);
-static void MPU_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void MPU_Init(void);
+static void Cache_Init(void);
 
 /* USER CODE END 0 */
 
@@ -77,20 +77,23 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  MPU_Init();
+	MPU_Init(); // Sets up the Memory Protection and Cache Settings
+
+	Cache_Init(); // Enables the Data and Instruction Data, following the MPU cache configuration
+
   /* USER CODE END 1 */
 /* USER CODE BEGIN Boot_Mode_Sequence_0 */
-  int32_t timeout;
+	int32_t timeout;
 /* USER CODE END Boot_Mode_Sequence_0 */
 
 /* USER CODE BEGIN Boot_Mode_Sequence_1 */
-  /* Wait until CPU2 boots and enters in stop mode or timeout*/
-  timeout = 0xFFFF;
-  while((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) != RESET) && (timeout-- > 0));
-  if ( timeout < 0 )
-  {
-  Error_Handler();
-  }
+	/* Wait until CPU2 boots and enters in stop mode or timeout*/
+	timeout = 0xFFFF;
+	while ((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) != RESET) && (timeout-- > 0))
+		;
+	if (timeout < 0) {
+		Error_Handler();
+	}
 /* USER CODE END Boot_Mode_Sequence_1 */
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -104,21 +107,21 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 /* USER CODE BEGIN Boot_Mode_Sequence_2 */
-/* When system initialization is finished, Cortex-M7 will release Cortex-M4 by means of
-HSEM notification */
-/*HW semaphore Clock enable*/
-__HAL_RCC_HSEM_CLK_ENABLE();
-/*Take HSEM */
-HAL_HSEM_FastTake(HSEM_ID_0);
-/*Release HSEM in order to notify the CPU2(CM4)*/
-HAL_HSEM_Release(HSEM_ID_0,0);
-/* wait until CPU2 wakes up from stop mode */
-timeout = 0xFFFF;
-while((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) == RESET) && (timeout-- > 0));
-if ( timeout < 0 )
-{
-Error_Handler();
-}
+	/* When system initialization is finished, Cortex-M7 will release Cortex-M4 by means of
+	 HSEM notification */
+	/*HW semaphore Clock enable*/
+	__HAL_RCC_HSEM_CLK_ENABLE();
+	/*Take HSEM */
+	HAL_HSEM_FastTake(HSEM_ID_0);
+	/*Release HSEM in order to notify the CPU2(CM4)*/
+	HAL_HSEM_Release(HSEM_ID_0, 0);
+	/* wait until CPU2 wakes up from stop mode */
+	timeout = 0xFFFF;
+	while ((__HAL_RCC_GET_FLAG(RCC_FLAG_D2CKRDY) == RESET) && (timeout-- > 0))
+		;
+	if (timeout < 0) {
+		Error_Handler();
+	}
 /* USER CODE END Boot_Mode_Sequence_2 */
 
   /* USER CODE BEGIN SysInit */
@@ -128,22 +131,19 @@ Error_Handler();
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-
   MX_FMC_Init();
   /* USER CODE BEGIN 2 */
-  BSP_SDRAM_Init(0); // Initialize the FMC (MCU) and SDRAM Registers
+	BSP_SDRAM_Init(0); // Initialize the FMC (MCU) and SDRAM Registers
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
-
 }
 
 /**
@@ -338,9 +338,9 @@ static void MX_GPIO_Init(void)
 
   /* USER CODE END MX_GPIO_Init_2 */
 }
-#define FOUR_MB (4UL * 1024 * 1024)
+
 /* USER CODE BEGIN 4 */
-void MPU_Init(void){
+void MPU_Init(void) {
 
 	/* Double Buffer Configuration */
 	MPU_Region_InitTypeDef MPU_InitStruct; // Declare a MPU object for MPU
@@ -352,29 +352,30 @@ void MPU_Init(void){
 	MPU_InitStruct.Size = MPU_REGION_SIZE_4GB;
 	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
 	MPU_InitStruct.SubRegionDisable = 0x87; // Make the entire sdram region active ( 0x6000 0000 to 0x DFFF FFFF ), 1000 0111
-    MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0; // Strongly ordered
+	MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0; // Strongly ordered
 	MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
 	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
 	MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
 	MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
 	MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
 
-
 	HAL_MPU_ConfigRegion(&MPU_InitStruct);
 	// -> is used when I have pointer to struct, it is a shorthand for *ptr, dereferencing
 	// Thus we use "."
-	 HAL_MPU_Disable(); // Disable the MPU in case there is ongoing memory access overlapping the
-	 // memory region we are about to change the configuration for
-	for (int i = 0; i< 2; i++){
+	HAL_MPU_Disable(); // Disable the MPU in case there is ongoing memory access overlapping the
+	// memory region we are about to change the configuration for
+	for (int i = 0; i < 2; i++) {
 		// (RBAR Register)
-		MPU_InitStruct.BaseAddress = (i==0)? LCD_FB_START_ADDRESS: LCD_FB_START_ADDRESS+FOUR_MB;
+		MPU_InitStruct.BaseAddress = (i == 0) ?
+		LCD_FB_START_ADDRESS :
+												LCD_FB_START_ADDRESS + FOUR_MB;
 		// (RNR Register)
-		MPU_InitStruct.Number  = MPU_REGION_NUMBER1+i; // Used to keep track of the configuration by "Region Number"
+		MPU_InitStruct.Number = MPU_REGION_NUMBER1 + i; // Used to keep track of the configuration by "Region Number"
 		// (RASR Register)
-			// Size: Width * Height * Bytes Per Pixel = 800 * 480 * 4 is about  1.5MiB
+		// Size: Width * Height * Bytes Per Pixel = 800 * 480 * 4 is about  1.5MiB
 		MPU_InitStruct.Size = MPU_REGION_SIZE_4MB; // Rounding up
 		MPU_InitStruct.Enable = MPU_REGION_ENABLE;
-		MPU_InitStruct.SubRegionDisable =0xF8;  // 1111 1000 xF8 Only enable first 3 regions (500KB each)
+		MPU_InitStruct.SubRegionDisable = 0xF8; // 1111 1000 xF8 Only enable first 3 regions (500KB each)
 		MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1; // FMC is a peripheral, which belongs to device memory
 		MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS; // Both privilaged and unprivilaged code can read and write
 		MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE; // It's not meant for instruction execution
@@ -385,17 +386,9 @@ void MPU_Init(void){
 		// This Function takes in a pointer
 		// Thus we do &MPU_InitStruct to get a pointer to it
 		// If we pass in just MPU_InitStruct, we will be making a copy
-				// This is inefficient
+		// This is inefficient
 		HAL_MPU_ConfigRegion(&MPU_InitStruct);
 	}
-
-
-
-
-
-
-
-
 
 	// Bit 2 : PRIVDEFENA: Set 1 to so default memory mapping is used for regions not specified
 	// Bit 1: HFNMIENA: Set to 0 to allow fault handler to fix incorrect access permission if any (caused by MPU?)
@@ -404,6 +397,15 @@ void MPU_Init(void){
 	//
 	// CTRL Register
 	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+}
+
+void Cache_Init(void) {
+	// Enabling Instruction Cache
+	SCB_EnableICache();
+
+	// Enabling Data Cache
+	SCB_EnableDCache();
 
 }
 /* USER CODE END 4 */
@@ -415,11 +417,10 @@ void MPU_Init(void){
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
