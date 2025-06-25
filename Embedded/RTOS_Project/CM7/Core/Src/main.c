@@ -683,23 +683,32 @@ void LCD_Init(void){
 	//  Upon receiving this signal, (depending on the panel), we might be required to send back an
 	//  Acknowledge signal back (handshake) We will only do refresh only we acknowledge that the
 	//  Previous Frame is completed and we are at the V-blank
-	cmd_dsi.TEAcknowledgeRequest = DSI_TE_ACKNOWLEDGE_ENABLE;
+	cmd_dsi.TEAcknowledgeRequest = DSI_TE_ACKNOWLEDGE_ENABLE; //(CMCR Register)
 
 	HAL_DSI_ConfigAdaptedCommandMode(&hlcd_dsi, &cmd_dsi);
-//	HAL_DSI_Refresh(hdsi)
-//	LPcmd_dsi.LPGenShortWriteNoP =
-//	LPcmd_dsi.LPGenShortWriteOneP =
-//	LPcmd_dsi.LPGenShortWriteTwoP =
-//	LPcmd_dsi.LPGenShortReadNoP =
-//	LPcmd_dsi.LPGenShortReadOneP =
-//	LPcmd_dsi.LPGenShortReadTwoP =
-//	LPcmd_dsi.LPGenLongWrite =
-//	LPcmd_dsi.LPDcsShortWriteNoP=
-//	LPcmd_dsi.LPDcsShortWriteOneP =
-//	LPcmd_dsi.LPDcsShortReadNoP=
-//	LPcmd_dsi.LPDcsLongWrite=
-//	LPcmd_dsi.LPMaxReadPacket =
-//	LPcmd_dsi.AcknowledgeRequest =
+
+	//* CMCR Register
+		//* We deciding what type of data & size is allowed to send in low power mode.
+		// My thought process is that short read/write can we done in low power mode
+		// Because long/max read/write needs to be done in high speed
+		// If we allow everything in low-power mode, the clock is obviously slower and
+		// The time we can run our actual application is shorter.
+	// DCS: Standard Display Command
+	// Generic: Any Format (non-standard)
+	LPcmd_dsi.LPGenShortWriteNoP = DSI_LP_GSW0P_ENABLE;
+	LPcmd_dsi.LPGenShortWriteOneP = DSI_LP_GSW1P_ENABLE;
+	LPcmd_dsi.LPGenShortWriteTwoP = DSI_LP_GSW2P_ENABLE;
+	LPcmd_dsi.LPGenShortReadNoP = DSI_LP_GSR0P_ENABLE;
+	LPcmd_dsi.LPGenShortReadOneP = DSI_LP_GSR1P_ENABLE;
+	LPcmd_dsi.LPGenShortReadTwoP = DSI_LP_GSR2P_ENABLE;
+	LPcmd_dsi.LPGenLongWrite = DSI_LP_GLW_DISABLE; // High-Speed Only
+	LPcmd_dsi.LPDcsShortWriteNoP= DSI_LP_DSW0P_ENABLE;
+	LPcmd_dsi.LPDcsShortWriteOneP = DSI_LP_DSW1P_ENABLE;
+	LPcmd_dsi.LPDcsShortReadNoP= DSI_LP_DSR0P_ENABLE;
+	LPcmd_dsi.LPDcsLongWrite= DSI_LP_DLW_DISABLE;
+	LPcmd_dsi.LPMaxReadPacket = DSI_LP_MRDP_DISABLE; // High-Speed Only
+	LPcmd_dsi.AcknowledgeRequest = DSI_ACKNOWLEDGE_ENABLE; // Enabling Acknowledge Request -> begin next frame transmission on the current frame v-blank
+	// This saves time and latency later on
 
 	HAL_DSI_ConfigCommand(&hlcd_dsi, &LPcmd_dsi);
 
