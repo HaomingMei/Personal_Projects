@@ -158,6 +158,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
 	}
   /* USER CODE END 3 */
 }
@@ -458,6 +459,8 @@ static void MX_USART1_UART_Init(void)
   {
     Error_Handler();
   }
+
+
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
@@ -658,33 +661,45 @@ void LCD_Init(void){
 		Error_Handler();
 	}
 
+	//* Config AdaptedCommandMode will set the MCR, WCFGR, and later OTM8009A_Init will set the addresses up
+	cmd_dsi.ColorCoding = DSI_RGB888;
+	cmd_dsi.VirtualChannelID = 0x0; // I don't think this matters
 
-	cmd_dsi.VirtualChannelID =
-	cmd_dsi.ColorCoding =
-	cmd_dsi.CommandSize =
-	cmd_dsi.TearingEffectSource =
-	cmd_dsi.TearingEffectPolarity =
-	cmd_dsi.HSPolarity =
-	cmd_dsi.VSPolarity =
-	cmd_dsi.DEPolarity =
-	cmd_dsi.VSyncPol =
-	cmd_dsi.AutomaticRefresh =
-	cmd_dsi.TEAcknowledgeRequest =
-	HAL_DSI_ConfigAdaptedCommandMode(&hlcd_dsi, &LPcmd_dsi);
-	HAL_DSI_Refresh(hdsi)
-	LPcmd_dsi.LPGenShortWriteNoP =
-	LPcmd_dsi.LPGenShortWriteOneP =
-	LPcmd_dsi.LPGenShortWriteTwoP =
-	LPcmd_dsi.LPGenShortReadNoP =
-	LPcmd_dsi.LPGenShortReadOneP =
-	LPcmd_dsi.LPGenShortReadTwoP =
-	LPcmd_dsi.LPGenLongWrite =
-	LPcmd_dsi.LPDcsShortWriteNoP=
-	LPcmd_dsi.LPDcsShortWriteOneP =
-	LPcmd_dsi.LPDcsShortReadNoP=
-	LPcmd_dsi.LPDcsLongWrite=
-	LPcmd_dsi.LPMaxReadPacket =
-	LPcmd_dsi.AcknowledgeRequest =
+	cmd_dsi.CommandSize = 800; // Max is 800 pixels (max active horizontal pixels per scan)
+	// Anything more than 800 is back, since the panel will wrap back to column 0 of the same row
+
+	//* (WCFGR) Wrapping Configuration Register
+		//* Used to synchronize with the panel's internal scan timing to avoid tearing
+	cmd_dsi.TearingEffectSource = DSI_TE_DSILINK;
+	cmd_dsi.TearingEffectPolarity = DSI_TE_RISING_EDGE;
+	cmd_dsi.VSyncPol = DSI_VSYNC_FALLING; // LTDC Halts on Falling Edge, it's convenient since we don't have to wait until the next rising edge (unknown)
+	cmd_dsi.AutomaticRefresh =DSI_AR_DISABLE; // We are manually setting the refresh dsi signal
+	//* For the LPCR (Polarity Configuration Register) It's left on default
+	cmd_dsi.HSPolarity = DSI_HSYNC_ACTIVE_HIGH;
+	cmd_dsi.VSPolarity = DSI_VSYNC_ACTIVE_HIGH;
+	cmd_dsi.DEPolarity = DSI_DATA_ENABLE_ACTIVE_HIGH;
+
+	//* TE Signal is send from Panel to DSI during V-blank, where no pixel is actively being drawn.
+	//  Upon receiving this signal, (depending on the panel), we might be required to send back an
+	//  Acknowledge signal back (handshake) We will only do refresh only we acknowledge that the
+	//  Previous Frame is completed and we are at the V-blank
+	cmd_dsi.TEAcknowledgeRequest = DSI_TE_ACKNOWLEDGE_ENABLE;
+
+	HAL_DSI_ConfigAdaptedCommandMode(&hlcd_dsi, &cmd_dsi);
+//	HAL_DSI_Refresh(hdsi)
+//	LPcmd_dsi.LPGenShortWriteNoP =
+//	LPcmd_dsi.LPGenShortWriteOneP =
+//	LPcmd_dsi.LPGenShortWriteTwoP =
+//	LPcmd_dsi.LPGenShortReadNoP =
+//	LPcmd_dsi.LPGenShortReadOneP =
+//	LPcmd_dsi.LPGenShortReadTwoP =
+//	LPcmd_dsi.LPGenLongWrite =
+//	LPcmd_dsi.LPDcsShortWriteNoP=
+//	LPcmd_dsi.LPDcsShortWriteOneP =
+//	LPcmd_dsi.LPDcsShortReadNoP=
+//	LPcmd_dsi.LPDcsLongWrite=
+//	LPcmd_dsi.LPMaxReadPacket =
+//	LPcmd_dsi.AcknowledgeRequest =
 
 	HAL_DSI_ConfigCommand(&hlcd_dsi, &LPcmd_dsi);
 
