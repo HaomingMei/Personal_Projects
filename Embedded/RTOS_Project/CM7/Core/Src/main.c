@@ -29,6 +29,8 @@
 static RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct; // Struct used to set the clock configuration for the LTDC display controller
 extern DSI_HandleTypeDef hlcd_dsi;
 DSI_PLLInitTypeDef pll_dsi;
+DSI_CmdCfgTypeDef cmd_dsi;
+DSI_LPCmdTypeDef LPcmd_dsi;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -616,20 +618,7 @@ void Cache_Init(void) {
 
 void LCD_Init(void){
 
-	hlcd_dsi.Instance = DSI;
-	hlcd_dsi.Init.AutomaticClockLaneControl= DSI_AUTO_CLK_LANE_CTRL_ENABLE; // Program is not complex enough to do manual switching
-	hlcd_dsi.Init.NumberOfLanes = DSI_TWO_DATA_LANES; // Increasese the bandwidth -> less "data preparation" latency between frames
-	hlcd_dsi.Init.TXEscapeCkdiv = 3;		// Defines Low Speed Clock Speed -> saves power on idle
-	//* Desired Frame Rate = 60 Frames / Second -> 16.66ms between each frame refresh
-	//* (bytes per frame) / (fbyte * Num_Lanes) <= 16.66ms
-	//* (800*480*3) / (36Mhz * 2) is about supports up to 16ms between each frame refresh
-	//* In case of overhead, we multipled the fbyte by 1.5, giving us 54Mhz
-	pll_dsi.PLLIDF = DSI_PLL_IN_DIV1;
-	pll_dsi.PLLNDIV = 35;
-	pll_dsi.PLLODF = DSI_PLL_OUT_DIV2;
-	//* These configuration give us a fbyte of 54.6875Mhz, supporting up to 10.667ms between each refresh (faster)
-
-
+	//LCD_MspInit();
 
 	//BSP_LCD_Reset(0);
 	// We keep track of these information so the hardware can switch to the most optimal
@@ -650,6 +639,56 @@ void LCD_Init(void){
 
 	// Functions wants a pointer, so we take the address to give the pointer to the InitStruct
 	HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
+
+
+	hlcd_dsi.Instance = DSI;
+	hlcd_dsi.Init.AutomaticClockLaneControl= DSI_AUTO_CLK_LANE_CTRL_ENABLE; // Program is not complex enough to do manual switching
+	hlcd_dsi.Init.NumberOfLanes = DSI_TWO_DATA_LANES; // Increasese the bandwidth -> less "data preparation" latency between frames
+	hlcd_dsi.Init.TXEscapeCkdiv = 3;		// Defines Low Speed Clock Speed -> saves power on idle
+	//* Desired Frame Rate = 60 Frames / Second -> 16.66ms between each frame refresh
+	//* (bytes per frame) / (fbyte * Num_Lanes) <= 16.66ms
+	//* (800*480*3) / (36Mhz * 2) is about supports up to 16ms between each frame refresh
+	//* In case of overhead, we multipled the fbyte by 1.5, giving us 54Mhz
+	pll_dsi.PLLIDF = DSI_PLL_IN_DIV1;
+	pll_dsi.PLLNDIV = 35;
+	pll_dsi.PLLODF = DSI_PLL_OUT_DIV2;
+	//* These configuration give us a fbyte of 54.6875Mhz, supporting up to 10.667ms between each refresh (faster)
+
+	if(HAL_DSI_Init(&hlcd_dsi, &pll_dsi) != HAL_OK){
+		Error_Handler();
+	}
+
+
+	cmd_dsi.VirtualChannelID =
+	cmd_dsi.ColorCoding =
+	cmd_dsi.CommandSize =
+	cmd_dsi.TearingEffectSource =
+	cmd_dsi.TearingEffectPolarity =
+	cmd_dsi.HSPolarity =
+	cmd_dsi.VSPolarity =
+	cmd_dsi.DEPolarity =
+	cmd_dsi.VSyncPol =
+	cmd_dsi.AutomaticRefresh =
+	cmd_dsi.TEAcknowledgeRequest =
+	HAL_DSI_ConfigAdaptedCommandMode(&hlcd_dsi, &LPcmd_dsi);
+	HAL_DSI_Refresh(hdsi)
+	LPcmd_dsi.LPGenShortWriteNoP =
+	LPcmd_dsi.LPGenShortWriteOneP =
+	LPcmd_dsi.LPGenShortWriteTwoP =
+	LPcmd_dsi.LPGenShortReadNoP =
+	LPcmd_dsi.LPGenShortReadOneP =
+	LPcmd_dsi.LPGenShortReadTwoP =
+	LPcmd_dsi.LPGenLongWrite =
+	LPcmd_dsi.LPDcsShortWriteNoP=
+	LPcmd_dsi.LPDcsShortWriteOneP =
+	LPcmd_dsi.LPDcsShortReadNoP=
+	LPcmd_dsi.LPDcsLongWrite=
+	LPcmd_dsi.LPMaxReadPacket =
+	LPcmd_dsi.AcknowledgeRequest =
+
+	HAL_DSI_ConfigCommand(&hlcd_dsi, &LPcmd_dsi);
+
+
 }
 /* USER CODE END 4 */
 
