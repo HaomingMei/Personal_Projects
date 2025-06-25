@@ -158,6 +158,8 @@ void Error_Handler(void);
 #define FMC_D17_GPIO_Port GPIOH
 #define FMC_D20_Pin GPIO_PIN_12
 #define FMC_D20_GPIO_Port GPIOH
+#define DSI_TE_Pin GPIO_PIN_2
+#define DSI_TE_GPIO_Port GPIOJ
 #define FMC_SDRAS_Pin GPIO_PIN_11
 #define FMC_SDRAS_GPIO_Port GPIOF
 #define FMC_A10_Pin GPIO_PIN_0
