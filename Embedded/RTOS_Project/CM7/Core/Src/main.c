@@ -555,7 +555,7 @@ void MPU_Init(void) {
 
 	/* Double Buffer Configuration */
 	MPU_Region_InitTypeDef MPU_InitStruct; // Declare a MPU object for MPU
-
+	OTM8009A_Object_t IOCtx;
 	// Non-Frame Buffer Memory Space = 4GB
 
 	MPU_InitStruct.BaseAddress = 0x00; // Excluding the frame buffer here
@@ -620,7 +620,7 @@ void Cache_Init(void) {
 
 
 void LCD_Init(void){
-
+	DSI_PHY_TimerTypeDef  PhyTimings;
 	//LCD_MspInit();
 
 	//BSP_LCD_Reset(0);
@@ -711,6 +711,21 @@ void LCD_Init(void){
 	// This saves time and latency later on
 
 	HAL_DSI_ConfigCommand(&hlcd_dsi, &LPcmd_dsi);
+
+	//* Recall that the low speed clock is the high speed/TXEscapeCkdiv =
+	//* For CLTCR Register
+	PhyTimings.ClockLaneHS2LPTime =
+	PhyTimings.ClockLaneLP2HSTime =
+	//* For DLTCR Register
+	PhyTimings.DataLaneHS2LPTime =
+	PhyTimings.DataLaneLP2HSTime =
+	PhyTimings.DataLaneMaxReadTime =
+	//* For PCONFR Register
+	PhyTimings.StopWaitTime =
+
+
+
+
 
 
 }
