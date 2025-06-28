@@ -555,7 +555,7 @@ void MPU_Init(void) {
 
 	/* Double Buffer Configuration */
 	MPU_Region_InitTypeDef MPU_InitStruct; // Declare a MPU object for MPU
-	OTM8009A_Object_t IOCtx;
+
 	// Non-Frame Buffer Memory Space = 4GB
 
 	MPU_InitStruct.BaseAddress = 0x00; // Excluding the frame buffer here
@@ -621,6 +621,8 @@ void Cache_Init(void) {
 
 void LCD_Init(void){
 	DSI_PHY_TimerTypeDef  PhyTimings;
+	OTM8009A_Object_t OTM_Object;
+	OTM8009A_IO_t OTM_IO;
 	//LCD_MspInit();
 
 	//BSP_LCD_Reset(0);
@@ -714,18 +716,30 @@ void LCD_Init(void){
 
 	//* Recall that the low speed clock is the high speed/TXEscapeCkdiv =
 	//* For CLTCR Register
-	PhyTimings.ClockLaneHS2LPTime =
-	PhyTimings.ClockLaneLP2HSTime =
+	PhyTimings.ClockLaneHS2LPTime = 35;
+	PhyTimings.ClockLaneLP2HSTime = 35;
 	//* For DLTCR Register
-	PhyTimings.DataLaneHS2LPTime =
-	PhyTimings.DataLaneLP2HSTime =
-	PhyTimings.DataLaneMaxReadTime =
+	PhyTimings.DataLaneHS2LPTime = 35;
+	PhyTimings.DataLaneLP2HSTime = 35;
+	PhyTimings.DataLaneMaxReadTime = 0;
 	//* For PCONFR Register
-	PhyTimings.StopWaitTime =
+	PhyTimings.StopWaitTime = 10;
 
+	HAL_DSI_ConfigPhyTimer(&hlcd_dsi, &PhyTimings);
 
-
-
+	//* We do not need an MMIO address since we are writing and reading from the DSI
+	//* We have the DSI address and can send read/write commands using it
+	//* The lanes are hardwired so it's not mmio.
+	OTM_IO.Address = 0; // Talking to virtual channel 0 (display 0)
+	OTM_IO.GetTick = BSP_GetTick();
+	OTM_IO.ReadReg = DSI_IO_Read; // Can customize later
+	OTM_IO.WriteReg = DSI_IO_Write; // Can customize later
+	//* Assigns the Appropriate Read/Write, and gettick functions to interface with the LCD Display
+	OTM_Object.IO = OTM_IO;
+	OTM8009A_RegisterBusIO(&OTM_Object, &OTM_IO);
+	//* Tells the LCD Display what Byte Format to Expect and the Orientation
+	//* so the pixel displays or buffers in the correct direction
+	OTM8009A_Init(&OTM_Object, OTM8009A_FORMAT_RGB888, OTM8009A_ORIENTATION_LANDSCAPE);
 
 
 }
