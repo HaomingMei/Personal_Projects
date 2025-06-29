@@ -623,7 +623,7 @@ void LCD_Init(void){
 	DSI_PHY_TimerTypeDef  PhyTimings;
 	OTM8009A_Object_t OTM_Object;
 	OTM8009A_IO_t OTM_IO;
-	//LCD_MspInit();
+	//LCD_MspInit(); TODO NEED TO BE ADDED Later
 
 	//BSP_LCD_Reset(0);
 	// We keep track of these information so the hardware can switch to the most optimal
@@ -645,7 +645,8 @@ void LCD_Init(void){
 	// Functions wants a pointer, so we take the address to give the pointer to the InitStruct
 	HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
-
+	//* Remove any previous configuration
+	HAL_DSI_DeInit(&(hlcd_dsi));
 	hlcd_dsi.Instance = DSI;
 	hlcd_dsi.Init.AutomaticClockLaneControl= DSI_AUTO_CLK_LANE_CTRL_ENABLE; // Program is not complex enough to do manual switching
 	hlcd_dsi.Init.NumberOfLanes = DSI_TWO_DATA_LANES; // Increasese the bandwidth -> less "data preparation" latency between frames
@@ -714,6 +715,10 @@ void LCD_Init(void){
 
 	HAL_DSI_ConfigCommand(&hlcd_dsi, &LPcmd_dsi);
 
+	LTDC_Init();
+
+	HAL_DSI_Start(&(hlcd_dsi));
+
 	//* Recall that the low speed clock is the high speed/TXEscapeCkdiv =
 	//* For CLTCR Register
 	PhyTimings.ClockLaneHS2LPTime = 35;
@@ -741,6 +746,8 @@ void LCD_Init(void){
 	//* so the pixel displays or buffers in the correct direction
 	OTM8009A_Init(&OTM_Object, OTM8009A_FORMAT_RGB888, OTM8009A_ORIENTATION_LANDSCAPE);
 
+	HAL_DSI_ConfigFlowControl(&hlcd_dsi, DSI_FLOW_CONTROL_BTA);
+	HAL_DSI_ForceRXLowPower(&hlcd_dsi, ENABLE);
 
 }
 /* USER CODE END 4 */
