@@ -869,6 +869,20 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF10_QUADSPI;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : KEYPAD_COLUMN1_D7_Pin KEYPAD_ROW4_D6_Pin KEYPAD_COLUMN3_D9_Pin KEYPAD_COLUMN2_D8_Pin
+                           KEYPAD_ROW1_D2_Pin KEYPAD_ROW2_D4_Pin */
+  GPIO_InitStruct.Pin = KEYPAD_COLUMN1_D7_Pin|KEYPAD_ROW4_D6_Pin|KEYPAD_COLUMN3_D9_Pin|KEYPAD_COLUMN2_D8_Pin
+                          |KEYPAD_ROW1_D2_Pin|KEYPAD_ROW2_D4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : KEYPAD_ROW3_D5_Pin */
+  GPIO_InitStruct.Pin = KEYPAD_ROW3_D5_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(KEYPAD_ROW3_D5_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : PB2 */
   GPIO_InitStruct.Pin = GPIO_PIN_2;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
