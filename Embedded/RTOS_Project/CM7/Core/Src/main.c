@@ -48,11 +48,11 @@ DSI_LPCmdTypeDef LPcmd_dsi;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-#if 0
+
 DSI_HandleTypeDef hdsi;
 
 LTDC_HandleTypeDef hltdc;
-#endif
+
 UART_HandleTypeDef huart1;
 
 SDRAM_HandleTypeDef hsdram1;
@@ -142,10 +142,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_FMC_Init();
-#if 0
   MX_DSIHOST_DSI_Init();
   MX_LTDC_Init();
-#endif
   /* USER CODE BEGIN 2 */
 	BSP_SDRAM_Init(0); // Initialize the FMC (MCU) and SDRAM Registers
 
@@ -459,8 +457,6 @@ static void MX_USART1_UART_Init(void)
   {
     Error_Handler();
   }
-
-
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */

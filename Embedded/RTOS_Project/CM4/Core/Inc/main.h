@@ -49,8 +49,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 void MX_USART1_UART_Init(void);
@@ -142,10 +140,6 @@ void MX_USART1_UART_Init(void);
 #define ETH_REF_CLK_GPIO_Port GPIOA
 #define ARD_D1_Pin GPIO_PIN_8
 #define ARD_D1_GPIO_Port GPIOJ
-#define ARD_D6_Pin GPIO_PIN_7
-#define ARD_D6_GPIO_Port GPIOJ
-#define ARD_D9_Pin GPIO_PIN_6
-#define ARD_D9_GPIO_Port GPIOJ
 #define ULPI_NXT_Pin GPIO_PIN_4
 #define ULPI_NXT_GPIO_Port GPIOH
 #define ULPI_D3_Pin GPIO_PIN_10
