@@ -13,3 +13,13 @@ const char Keys_4by3[4][3] = {
 		{'*', '0', '#'}
 
 };
+const
+
+void Restore_Rows(Keypad_TypeDef Keypad_Struct){
+	// Set all the Row GPIO Pins to Input and Pull Up
+}
+
+bool Key_Pressed(Keypad_TypeDef Keypad_Struct, char* Pressed_Row, char* Pressed_Column );
+
+
+

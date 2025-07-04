@@ -17,17 +17,21 @@
 extern const char Keypad_4by3[4][3];
 
 
-
+// Record this information when we do GPIO INIT
 typedef struct{
-	uint32_t num_Rows;
-	uint32_t num_Cols;
-
+	GPIO_PIN Row_Pins[4];
+	GPIO_PIN Col_Pins[3];
 
 }Keypad_TypeDef;
 
+typedef struct{
+	 GPIO_TypeDef *port;
+	 uint16_t      pin;
+}GPIO_PIN;
+
 // No duplication error here since declaration needs no storage
 // We will write the function in keypad.c
-void Restore_Keys(Keypad_TypeDef Keypad_Struct); // Pulls all the pin to input high
+void Reset_Rows(void); // Pulls all the pin to input high
 // Sets Each Row Pin to Output, and sends a Low signal
 // Check which Column Pin is Low, if there is a match, break and return True. Also
 // Return the Corresponding the Row and Column by Reference
