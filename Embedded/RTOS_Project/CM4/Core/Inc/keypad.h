@@ -8,7 +8,7 @@
 #ifndef INC_KEYPAD_H_
 #define INC_KEYPAD_H_
 #include <stdbool.h>
-
+#include <stdint.h>
 
 #endif /* INC_KEYPAD_H_ */
 // Use extern because with normal declaration, every C file will make a copy of it
@@ -25,7 +25,8 @@ typedef struct{
 
 }Keypad_TypeDef;
 
-
+// No duplication error here since declaration needs no storage
+// We will write the function in keypad.c
 void Restore_Keys(Keypad_TypeDef Keypad_Struct); // Pulls all the pin to input high
 // Sets Each Row Pin to Output, and sends a Low signal
 // Check which Column Pin is Low, if there is a match, break and return True. Also
