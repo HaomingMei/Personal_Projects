@@ -927,10 +927,11 @@ static void MX_GPIO_Init(void)
 
   Keypad.Col_Pins[2].port = GPIOJ;
   Keypad.Col_Pins[2].pin = KEYPAD_COLUMN3_D9_Pin;
-
+  uint16_t temp;
+  uint16_t counter;
   for(int row = 0; row<4; row++){
-	  uint16_t temp = Keypad.Row_Pins[row].pin;
-	  uint16_t counter = 0;
+	  temp = Keypad.Row_Pins[row].pin;
+	  counter = 0;
 	  while(temp != 1){
 
 		  temp = temp >> 1; // Left Shifting by 1 until it becomes positive 1, thus the pin number
@@ -941,18 +942,17 @@ static void MX_GPIO_Init(void)
   }
   for(int col =0; col < 3; col++){
 
-	  uint16_t temp = Keypad.Col_Pins[col].pin;
-	  uint16_t counter = 0;
+	  temp = Keypad.Col_Pins[col].pin;
+	  counter = 0;
 	  while(temp != 1){
 
 		  temp = temp >> 1; // Left Shifting by 1 until it becomes positive 1, thus the pin number
 		  counter += 1;
 	  }
 
-	  Keypad.Row_Pins[col].pin_number = counter;
+	  Keypad.Col_Pins[col].pin_number = counter;
   }
 
-  //for(int )
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
