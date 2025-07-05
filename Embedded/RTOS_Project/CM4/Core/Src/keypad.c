@@ -13,30 +13,34 @@ const char Keys_4by3[4][3] = {
 		{'*', '0', '#'}
 
 };
-const
+#define KEYPAD_MODE_INPUT (0x0UL << 0U)
+#define KEYPAD_PULL_UP 0x00000001U
+void Restore_Rows(Keypad_TypeDef Keypad_Struct, uint16_t Row_Index){
+	// Set the Row GPIO Pins to Input and Pull Up
+	uint32_t temp;
+	uint32_t position;
+	position = Keypad_Struct.Row_Pins[Row_Index].pin_number; // Get the Pin Number
+	//* Set the Port Mode Register (MODER) to Input
 
-void Restore_Rows(Keypad_TypeDef Keypad_Struct){
-//	GPIO_InitTypeDef GPIO_InitStruct = {0};
-//	GPIO_InitStruct.Pin = KEYPAD_COLUMN1_D7_Pin|KEYPAD_ROW4_D6_Pin|KEYPAD_COLUMN3_D9_Pin|KEYPAD_COLUMN2_D8_Pin
-//            |KEYPAD_ROW1_D2_Pin|KEYPAD_ROW2_D4_Pin;
-//	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	//GPIO_InitStruct.Pull = ;
+	temp = Keypad_Struct.Row_Pins[Row_Index].port->MODER;
+
+	// Position has to be multiplied by 2 since each Pin takes 2 bits (total 32 bits)
+	temp &= ~(0x00 << (position * 2U)); // Clearing in case of pre-existing value
+	temp |= ((KEYPAD_MODE_INPUT) << (position * 2U)); // Setting
+	Keypad_Struct.Row_Pins[Row_Index].port->MODER= temp; // Updating the Register
+
+	//* Set the Pull-Up/Pull-Down Register (PUPDR) to PullUp
+
+	temp = Keypad_Struct.Row_Pins[Row_Index].port->PUPDR;
+	temp &= ~(0x00 << (position * 2U)); // Clear
+	temp |= ((KEYPAD_PULL_UP) << (position * 2U)); // Setting Pull-Up
+	Keypad_Struct.Row_Pins[Row_Index].port->PUPDR = temp;
+
+
 }
 
 int Key_Pressed(Keypad_TypeDef Keypad_Struct, char* Pressed_Row, char* Pressed_Column ){
-	// Set all the Row GPIO Pins to Input and Pull Up
-//		uint32_t temp;
-//		uint32_t position;
-//		for(int i = 0; i < 4; i++){
-//			// Input
-//			position = KeyPad_Struct.Row_Pins[i].pin; // Get the Pin Number
-//			temp = KeyPad_Struct.Row_Pins[i]->MODER;
-//			temp &= ~(GPIO_MODER_MODE0 << (position * 2U)); // Clearing in case of pre-existing value
-//			 temp |= ((GPIO_Init->Mode & GPIO_MODE) << (position * 2U));
-//			KeyPad_Struct.Row_Pins[i]->MODER = 0x00 << (position * 2U);
-//
-//			// Pull Up
-//		}
+	// Resetting the Row to Input Mode with Pull Up
 	return 0; // 0 = False, 1 = True
 }
 
