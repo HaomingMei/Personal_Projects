@@ -32,12 +32,13 @@ typedef struct{
 
 // No duplication error here since declaration needs no storage
 // We will write the function in keypad.c
-void Restore_Rows(Keypad_TypeDef Keypad_Struct, uint16_t Row_Index); // Pulls all the pin to input high
+void Restore_Rows(const Keypad_TypeDef* Keypad_Struct, uint16_t Row_Index); // Pulls all the pin to input high
 
 // Sets Each Row Pin to Output, and sends a Low signal
 // Check which Column Pin is Low, if there is a match, break and return True. Also
 // Return the Corresponding the Row and Column by Reference
-int Key_Pressed(Keypad_TypeDef Keypad_Struct, char* Pressed_Row, char* Pressed_Column );
+int Key_Pressed(const Keypad_TypeDef* Keypad_Struct, uint16_t* Pressed_Row, uint16_t* Pressed_Column );
 
+void Drive_Row_Low(const Keypad_TypeDef* Keypad_Struct, uint16_t Row_Index);
 
 
