@@ -91,7 +91,7 @@ PCD_HandleTypeDef hpcd_USB_OTG_HS;
 
    uint8_t cec_receive_buffer[16];
 /* USER CODE BEGIN PV */
-
+Keypad_TypeDef Keypad;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -907,6 +907,52 @@ static void MX_GPIO_Init(void)
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
+  Keypad.Row_Pins[0].port = GPIOJ;
+  Keypad.Row_Pins[0].pin = KEYPAD_ROW1_D2_Pin;
+
+  Keypad.Row_Pins[1].port = GPIOJ;
+  Keypad.Row_Pins[1].pin = KEYPAD_ROW2_D4_Pin;
+
+  Keypad.Row_Pins[2].port = GPIOA;
+  Keypad.Row_Pins[2].pin = KEYPAD_ROW3_D5_Pin;
+
+  Keypad.Row_Pins[3].port = GPIOJ;
+  Keypad.Row_Pins[3].pin = KEYPAD_ROW4_D6_Pin;
+
+  Keypad.Col_Pins[0].port = GPIOJ;
+  Keypad.Col_Pins[0].pin = KEYPAD_COLUMN1_D7_Pin;
+
+  Keypad.Col_Pins[1].port = GPIOJ;
+  Keypad.Col_Pins[1].pin = KEYPAD_COLUMN2_D8_Pin;
+
+  Keypad.Col_Pins[2].port = GPIOJ;
+  Keypad.Col_Pins[2].pin = KEYPAD_COLUMN3_D9_Pin;
+
+  for(int row = 0; row<4; row++){
+	  uint16_t temp = Keypad.Row_Pins[row].pin;
+	  uint16_t counter = 0;
+	  while(temp != 1){
+
+		  temp = temp >> 1; // Left Shifting by 1 until it becomes positive 1, thus the pin number
+		  counter += 1;
+	  }
+
+	  Keypad.Row_Pins[row].pin_number = counter;
+  }
+  for(int col =0; col < 3; col++){
+
+	  uint16_t temp = Keypad.Col_Pins[col].pin;
+	  uint16_t counter = 0;
+	  while(temp != 1){
+
+		  temp = temp >> 1; // Left Shifting by 1 until it becomes positive 1, thus the pin number
+		  counter += 1;
+	  }
+
+	  Keypad.Row_Pins[col].pin_number = counter;
+  }
+
+  //for(int )
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
