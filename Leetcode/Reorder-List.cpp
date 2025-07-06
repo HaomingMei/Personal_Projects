@@ -11,75 +11,50 @@
 class Solution {
 public:
     void reorderList(ListNode* head) {
-        
-        if(head == NULL || head->next== NULL)
-        {
-            return;
-        }
-        // Find mid Point with slow and fast pointers
-        ListNode* slow = head;
-        ListNode* fast = head->next;
-        if(slow->next == fast && fast->next == NULL)
-        {
-            return;
-        }
-        while(fast->next != NULL)
-        {
-            slow = slow->next;
-            if(fast->next->next == NULL)
-            {
-                fast = fast->next;
-            }
-            else{
-                fast = fast->next->next;
-            }
-            
-        }
-        ListNode* temp = slow->next;
-        slow ->next = nullptr;
-        // Reverse the slow nodes to fast nodes,
-        ListNode* prevPtr = nullptr;
-        ListNode* nextPtr = temp;
-        
-        while(temp != fast)
-        {
-            temp = temp->next;
-            nextPtr-> next = prevPtr;
-            prevPtr = nextPtr;
-            nextPtr = temp;
-            
-        }
-        fast->next= prevPtr;
 
-        // Traverse both Linked List
-        ListNode* left = head;
-        ListNode* tempLeft = NULL;
-        ListNode* tempRight = NULL;
-        while(fast != NULL)
+        //* Find the Midpoint using Slow and Fast Pointer Techniques
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(fast->next != nullptr && fast->next->next != nullptr) // Ensures that the Split is EVen
         {
-            if(left->next != NULL)
-            {
-                tempLeft = left->next;
-            }
-            else{
-                tempLeft->next = tempRight;
-                break;
-            }
-            if(fast->next !=NULL)
-            {
-                tempRight = fast->next;
-            }
-            else{
-                left->next = fast;
-                fast->next = tempLeft;
-                break;
-            }
-            left->next = fast;
-            fast->next = tempLeft;
-            fast = tempRight;
-            left = tempLeft;
+            slow = slow -> next;
+            fast = fast -> next -> next;
         }
+
+        ListNode* secondHalf = slow->next;
+        ListNode* temp = nullptr;
+        ListNode* prev = nullptr;
+        slow->next = nullptr;
+        //* Reverse the Secondhalf Singly Linked List
+        while(secondHalf != nullptr){
+            temp = secondHalf->next;
+            secondHalf -> next = prev;
+            prev = secondHalf;
+            secondHalf = temp;
+        }
+        //* Merge the two together
+        ListNode* temp1 = nullptr;
+        ListNode* temp2 = nullptr;
+        ListNode* first = head;
+        secondHalf = prev;
+            // prev is the next head of the reversed secondhalf
+        while(secondHalf != nullptr  ){ // ensure that we stop at the right node
+            temp1 = first->next;
+            temp2 = secondHalf->next;
+
+            secondHalf->next = temp1;
+            first->next = secondHalf;
+
+            first = temp1;
+            secondHalf = temp2;
+           // if(secondHalf->next == nullptr){
+            //    break;
+          //  }
+        }
+
+        // Return the head
+    
         
     }
-   
 };
