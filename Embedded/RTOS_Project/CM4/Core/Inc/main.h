@@ -51,7 +51,6 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN EFP */
 
@@ -88,10 +87,6 @@ void MX_USART1_UART_Init(void);
 #define ETH_TXD0_GPIO_Port GPIOG
 #define SDIO1_CMD_Pin GPIO_PIN_2
 #define SDIO1_CMD_GPIO_Port GPIOD
-#define STLINK_TX_Pin GPIO_PIN_10
-#define STLINK_TX_GPIO_Port GPIOA
-#define STLINK_RX_Pin GPIO_PIN_9
-#define STLINK_RX_GPIO_Port GPIOA
 #define B2_Pin GPIO_PIN_13
 #define B2_GPIO_Port GPIOC
 #define SAI1_SD_A_Pin GPIO_PIN_6
