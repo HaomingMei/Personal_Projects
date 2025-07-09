@@ -96,6 +96,3 @@ int Key_Pressed(const Keypad_TypeDef* Keypad_Struct, uint16_t* Pressed_Row, uint
 	}
 	return 0; // 0 = False, 1 = True
 }
-
-
-

@@ -56,6 +56,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern CEC_HandleTypeDef hcec;
+extern UART_HandleTypeDef huart8;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -197,6 +198,20 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32h7xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles UART8 global interrupt.
+  */
+void UART8_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART8_IRQn 0 */
+
+  /* USER CODE END UART8_IRQn 0 */
+  HAL_UART_IRQHandler(&huart8);
+  /* USER CODE BEGIN UART8_IRQn 1 */
+
+  /* USER CODE END UART8_IRQn 1 */
+}
 
 /**
   * @brief This function handles HDMI-CEC global interrupt.

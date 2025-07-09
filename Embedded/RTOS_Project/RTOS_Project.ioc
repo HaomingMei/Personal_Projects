@@ -269,6 +269,7 @@ NVIC2.PendSV_IRQn=true\:0\:0\:false\:false\:true\:false\:false\:false
 NVIC2.PriorityGroup=NVIC_PRIORITYGROUP_4
 NVIC2.SVCall_IRQn=true\:0\:0\:false\:false\:true\:false\:false\:false
 NVIC2.SysTick_IRQn=true\:0\:0\:false\:false\:true\:false\:true\:false
+NVIC2.UART8_IRQn=true\:0\:0\:false\:false\:true\:true\:true\:true
 NVIC2.UsageFault_IRQn=true\:0\:0\:false\:false\:true\:false\:false\:false
 PA0_C.GPIOParameters=GPIO_Label,PinAttribute
 PA0_C.GPIO_Label=ARD_A2
