@@ -16,4 +16,35 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 		HC05_Process(&huart);
 	}
 }
+int HC05_Process(UART_HandleTypeDef *huart){
+	// Local Variable Storing Size
+
+	//* Basic Implementation
+
+		// Insert at Start
+
+		// HERE: Check Buffer if Inserted Propertly
+
+
+	//* Full Implementation
+	// If Not Full
+
+		// if Check Byte Count Enough
+
+
+		// Insert new data into buffer
+
+		// Else Return 0 (Failed/Full) -> Blink LED?/ Screen Indication
+
+	// Else
+
+		// Pause/Hold...?
+
+	// Return 0 Upon Success
+
+
+
+
+}
+
 
