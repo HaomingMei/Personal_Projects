@@ -47,4 +47,40 @@ int HC05_Process(UART_HandleTypeDef *huart){
 
 }
 
+#define BUFFERSIZE 128 // Average Sentence Length is 15-20 words. ~5 letter per word * 20 * 0.5 byte per character = 50 bytes
+// factor of 2 is easy for bitwise maniupulation
+// Declare Ring Buffer Struct Here
+typedef struct{
+	uint8_t data[BUFFERSIZE];
+	uint8_t head;
+	uint8_t tail;
+} RingBuffer; // Default head = tail = 0, buffer is empty
+// Head increments upon insertion and tail increases when bytes are read
+
+
+// Init Ring Buffer Function: upon HC05_Init
+void Ring_Buffer_Init(RingBuffer *Bufer){
+	// Bluetooth Initialization
+
+	Buffer->head = 0;
+	Buffer->tail = 0;
+
+}
+
+// CheckEmpty Function
+
+// CheckFull Function
+
+// Insert Function
+
+// Read Function (Removes)
+
+// CheckByteCount
+
+// CheckEmptyCount
+
+// Reset Buffer Function
+
+
+
 

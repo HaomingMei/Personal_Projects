@@ -23,4 +23,5 @@ void HC05_BlueTooth_UART_TX(UART_HandleTypeDef *huart, uint8_t* data, uint16_t s
 void HC05_Process(UART_HandleTypeDef *huart);
 
 
+
 #endif /* INC_HC05_BLUETOOTH_H_ */
