@@ -9,6 +9,9 @@
 #include "HC05_Bluetooth.h"
 #include "stm32h7xx_hal.h"
 
+#define BUFFER_EMPTY 0
+#define BUFFER_NOT_EMPTY 1
+
 
 // This function will be Called when RX Reception Finishes (Interrupt Happens)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
@@ -43,7 +46,7 @@ int HC05_Process(UART_HandleTypeDef *huart){
 
 	// Return 0 Upon Success
 
-
+	return 0; // Placeholder
 
 
 }
@@ -52,9 +55,9 @@ int HC05_Process(UART_HandleTypeDef *huart){
 // factor of 2 is easy for bitwise maniupulation
 // Declare Ring Buffer Struct Here
 typedef struct{
-	uint8_t data[BUFFERSIZE];
-	uint8_t head;
-	uint8_t tail;
+	char data[BUFFERSIZE];
+	uint64_t head; // Points to buffer index, Increments when inserting
+	uint64_t tail; // Points to buffer index, Increments when a byte is read
 } RingBuffer; // Default head = tail = 0, buffer is empty
 // Head increments upon insertion and tail increases when bytes are read
 
@@ -68,40 +71,57 @@ void Ring_Buffer_Init(RingBuffer *Buffer){
 
 }
 
-// CheckEmpty Function
-void CheckEmpty(RingBuffer * Buffer){
-
+// CheckEmpty Function: Returns 0 if Buffer is Empty. Otherwise, Return 1 (There is some data to be read)
+inline int CheckEmpty(RingBuffer * Buffer){
+	return (Buffer->head != Buffer->tail);
 }
 
 
-// CheckFull Function
-void CheckFull(RingBuffer * Buffer){
+// CheckFull Function: Returns 0 if Not Full. Returns 1 if Full
+inline int CheckFull(RingBuffer * Buffer){
+	return (((Buffer->head + 1) % BUFFERSIZE )== Buffer->tail); // Since head and tail wraps around, and resets to 0 if increment after they hit BUFFER_SIZE - 1 index
 
 }
 
 // Insert Function
 
 void Insert(RingBuffer * Buffer, char * Data, uint8_t dataSize){
+	for(uint8_t i = 0; i < dataSize; i++){
+		if(CheckFull(Buffer)){
+			break;
+		}
+		Buffer->data[Buffer->head] = (char)Data[i];
+		Buffer->head = (Buffer->head + 1) % BUFFERSIZE;
+	}
+	return;
 
 }
 // Read Function (Removes)
 void ReadData(RingBuffer * Buffer,char * Data, uint8_t dataSize ){
+	for(uint8_t i = 0; i < dataSize; i++){
+		if(Buffer->head == Buffer->tail){ // Empty Case
+			break;
+		}
+		Data[i] = (char)Buffer->data[Buffer->tail];
+		Buffer->tail = (Buffer->tail + 1) % BUFFERSIZE; // Wraps around
+	}
+	return;
 
 }
 
 // CheckByteCount: Returns how many bytes can be read
-int CheckByteCount(RingBuffer * Buffer){
-
+inline int CheckByteCount(RingBuffer * Buffer){
+	 return (Buffer->head + BUFFERSIZE - Buffer->tail) % BUFFERSIZE;
 }
 
 // CheckEmptyCount: Returns the number of bytes that can be inserted without overwritting unprocessed data
-int CheckEmptyCount(RingBuffer * Buffer){
-
+inline int CheckEmptyCount(RingBuffer * Buffer){
+	return (BUFFERSIZE-1) - CheckByteCount(Buffer);
 }
 
 // Reset Buffer Function: Clear the Entire Buffer
 void Reset_Buffer(RingBuffer * Buffer){
-
+	Buffer->head = Buffer->tail = 0;
 }
 
 
