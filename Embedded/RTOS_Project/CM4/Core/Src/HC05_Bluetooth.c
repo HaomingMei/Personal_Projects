@@ -13,8 +13,9 @@
 // This function will be Called when RX Reception Finishes (Interrupt Happens)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart == &huart8){
-		HC05_Process(&huart);
+		HC05_Process(huart);
 	}
+
 }
 int HC05_Process(UART_HandleTypeDef *huart){
 	// Local Variable Storing Size
@@ -59,7 +60,7 @@ typedef struct{
 
 
 // Init Ring Buffer Function: upon HC05_Init
-void Ring_Buffer_Init(RingBuffer *Bufer){
+void Ring_Buffer_Init(RingBuffer *Buffer){
 	// Bluetooth Initialization
 
 	Buffer->head = 0;
@@ -68,18 +69,40 @@ void Ring_Buffer_Init(RingBuffer *Bufer){
 }
 
 // CheckEmpty Function
+void CheckEmpty(RingBuffer * Buffer){
+
+}
+
 
 // CheckFull Function
+void CheckFull(RingBuffer * Buffer){
+
+}
 
 // Insert Function
 
+void Insert(RingBuffer * Buffer, char * Data, uint8_t dataSize){
+
+}
 // Read Function (Removes)
+void ReadData(RingBuffer * Buffer,char * Data, uint8_t dataSize ){
 
-// CheckByteCount
+}
 
-// CheckEmptyCount
+// CheckByteCount: Returns how many bytes can be read
+int CheckByteCount(RingBuffer * Buffer){
 
-// Reset Buffer Function
+}
+
+// CheckEmptyCount: Returns the number of bytes that can be inserted without overwritting unprocessed data
+int CheckEmptyCount(RingBuffer * Buffer){
+
+}
+
+// Reset Buffer Function: Clear the Entire Buffer
+void Reset_Buffer(RingBuffer * Buffer){
+
+}
 
 
 

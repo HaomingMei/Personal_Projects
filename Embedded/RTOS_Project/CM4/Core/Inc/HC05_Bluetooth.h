@@ -20,7 +20,7 @@ void HC05_Init(void);
 void HC05_BlueTooth_UART_TX(UART_HandleTypeDef *huart, uint8_t* data, uint16_t size);
 
 //* Used for Parsing Data (Received)
-void HC05_Process(UART_HandleTypeDef *huart);
+int HC05_Process(UART_HandleTypeDef *huart);
 
 
 
