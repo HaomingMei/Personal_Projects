@@ -18,16 +18,23 @@ public:
             temp = mydequeue.front();
             if(temp >= t-3000){
                 counter += 1;
+                mydequeue.pop_front();
+                mydequeue.push_back(temp);
             }
-            mydequeue.pop_front();
-            mydequeue.push_back(temp);
+            else{
+                mydequeue.pop_front();
+            }
         }
         temp = mydequeue.front();
         if(temp >= t- 3000){
             counter += 1;
+             mydequeue.pop_front();
+            mydequeue.push_back(temp);
         }
-        mydequeue.pop_front();
-        mydequeue.push_back(temp);
+        else{
+
+            mydequeue.pop_front();  
+        }
 
         mydequeue.push_back(t);
         return counter;
