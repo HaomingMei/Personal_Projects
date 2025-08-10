@@ -13,8 +13,25 @@ class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
         //Recursive Solution
+        //vector<int> myTraversal;
+        //preorder(root, myTraversal);
+        //return myTraversal;   
         vector<int> myTraversal;
-        preorder(root, myTraversal);
+        stack<TreeNode*> myStack;
+        TreeNode* curr = root;
+        while(curr != nullptr || !myStack.empty()){
+            if(curr!= nullptr){
+                myStack.push(curr);
+                myTraversal.push_back(curr->val);
+                curr = curr->left;
+            }
+            else{
+                TreeNode* node = myStack.top();
+                myStack.pop();
+                curr = node->right;
+
+            }
+        }
         return myTraversal;
     }
     void preorder(TreeNode* node, vector<int> &myTraversal){
