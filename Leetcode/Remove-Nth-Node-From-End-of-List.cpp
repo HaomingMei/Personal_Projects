@@ -24,11 +24,11 @@ public:
             curr= curr ->next;
             count += 1;
         }
-        std::cout << "My BEFORE count is " << count << std::endl;
+       // std::cout << "My BEFORE count is " << count << std::endl;
         curr = root;
      
         count = count -n; // Number of nodes to travel
-        std::cout << "My count is " << count << std::endl;
+        //std::cout << "My count is " << count << std::endl;
         ListNode* prev = nullptr;
 
         while(count != 0){
