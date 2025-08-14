@@ -12,47 +12,33 @@
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        // This is code for recursive method
-        //vector<int> myTraversal;
-        //postorder(root, myTraversal);
-        //return myTraversal;
+        //Review
+        vector<int> ans;
+        stack<TreeNode*> st;
 
-        // Code for iterative method:
-        vector<int> myTraversal;
-        stack<TreeNode*> myStack;
-        TreeNode* myNode = root;
-        TreeNode* lastVisited = nullptr; // Need this node to ensure that
-        if(myNode == nullptr){
-            return myTraversal;
-        }
-        while(myNode!= nullptr || !myStack.empty()){
-          if(myNode != nullptr){ 
-            myStack.push(myNode);
-            myNode = myNode->left; // Process the left node first
-          }
-          else{ // Goes here when leftmost node is nullptr, and we need to check the right
-            TreeNode* node = myStack.top(); // Since the left most node of the previous parent is nullptr, we need to go back to the parent 
-            // Then, check the right children
-            if(node->right != nullptr && lastVisited != node->right){ // Right Exist Case, and I haven't visited
-                myNode = node->right;
+        TreeNode* curr = root;
+
+        while(curr != nullptr || !st.empty()){
+            if(curr != nullptr){
+                st.push(curr);
+                curr = curr ->left;
             }
-            else{ // Right Does not Exist case
-                myTraversal.push_back(node->val);
-                myStack.pop();
-                lastVisited = node;
+            else{
+                TreeNode* temp = st.top();
+                if(temp ->right != nullptr)
+                {
+                    curr = temp->right;
+                    temp ->right = nullptr; // Make it nullptr, so next time we add the "temp" node to the traversed list
+                }
+                else{
+                    st.pop();
+                    ans.push_back(temp->val);
+                    curr = temp->right;
+
+                }
             }
-          }
+
         }
-        return myTraversal;
-    }
-    void postorder(TreeNode* node, vector<int>& myTraversal){
-        if(node == nullptr){
-            return;
-        }
-        postorder(node->left, myTraversal);
-        postorder(node->right, myTraversal);
-        myTraversal.push_back(node->val);
-        return;
+        return ans;
     }
 };
-
