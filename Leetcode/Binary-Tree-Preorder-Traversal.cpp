@@ -12,38 +12,22 @@
 class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
-        //Recursive Solution
-        //vector<int> myTraversal;
-        //preorder(root, myTraversal);
-        //return myTraversal;   
-        vector<int> myTraversal;
-        stack<TreeNode*> myStack;
+        // Review
+        vector<int> ans;
+        stack<TreeNode*> st;
         TreeNode* curr = root;
-        while(curr != nullptr || !myStack.empty()){
+        while(curr!= nullptr || !st.empty()){
             if(curr!= nullptr){
-                myStack.push(curr);
-                myTraversal.push_back(curr->val);
-                curr = curr->left;
+                ans.push_back(curr->val);
+                st.push(curr);
+                curr=curr->left;
             }
             else{
-                TreeNode* node = myStack.top();
-                myStack.pop();
-                curr = node->right;
-
+                //curr = st.top();
+                curr = st.top()->right;
+                st.pop();
             }
         }
-        return myTraversal;
-    }
-    void preorder(TreeNode* node, vector<int> &myTraversal){
-        if(node == nullptr){
-           
-            return;
-        }
-        else{
-            myTraversal.push_back(node->val);
-            preorder(node->left, myTraversal);
-            preorder(node->right, myTraversal);
-        }
-        
+        return ans;
     }
 };
