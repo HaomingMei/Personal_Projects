@@ -12,40 +12,26 @@
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        // This is my recursive solution:
-        //vector<int> myTraversal;
-        //inorder(root, myTraversal);
-        //return myTraversal;
 
-
-        // This is my iterative solution
-        vector<int> myTraversal;
-        stack<TreeNode*> myStack;
-        
-
-        TreeNode* currentNode = root;
-        while(currentNode!= nullptr || !myStack.empty()){
-            if(currentNode != nullptr){
-                myStack.push(currentNode);
-                currentNode = currentNode->left;
-            }else{
-                TreeNode* node = myStack.top();
-                myStack.pop();
-                myTraversal.push_back(node->val);
-                currentNode = node->right;
+        // Review
+        stack<TreeNode*> st;
+        vector<int> ans;
+        TreeNode* curr = root;
+        while(curr != nullptr || !st.empty()){
+            if(curr!= nullptr){
+                st.push(curr);
+                curr  = curr->left;
             }
-        
-        }
-        return myTraversal;
-    }
+            else{
+               // TreeNode * temp = st.top();
+                curr = st.top();
+                ans.push_back(curr->val);
+                curr = curr->right;
+                st.pop();
 
-    void inorder(TreeNode* node, vector<int> & myTraversal){
-        if(node == nullptr){
-            return;
+
+            }
         }
-        inorder(node->left, myTraversal);
-        myTraversal.push_back(node->val);
-        inorder(node->right, myTraversal);
-        return;
+        return ans;
     }
 };
