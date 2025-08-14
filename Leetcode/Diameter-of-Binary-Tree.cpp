@@ -11,22 +11,22 @@
  */
 class Solution {
 public:
-    int currentMax = 0;
+    int currentMax=0;
     int diameterOfBinaryTree(TreeNode* root) {
+        // Review
         dfsSearch(root);
         return currentMax;
     }
-
     int dfsSearch(TreeNode* node){
-        if(node == nullptr){ // Search until node is nullptr
-            return 0;
+        // Base Case: 
+        if(node == nullptr){
+            return 0; // because there is no distance between the node and its parent
+
         }
-        int left = dfsSearch(node->left);
-        int right = dfsSearch(node->right);
-        // Use DFS to find the deepest length of left and right
-        // Left + Right for each parent node will be tracked and compared with the current maximum
-        currentMax = std::max(currentMax, left+right); // Update if needed
-        return 1 + std::max(left, right); // Plus one because we count the current node
-        
+        int leftDistance =  dfsSearch(node->left);
+        int rightDistance =  dfsSearch(node->right);
+
+        currentMax = std::max(currentMax, leftDistance+rightDistance); // See if the current node has the longest path
+        return 1 + std::max(leftDistance, rightDistance); // Case to take the longest path between left and right and to the parent, assuming parent node is the longest path
     }
 };
