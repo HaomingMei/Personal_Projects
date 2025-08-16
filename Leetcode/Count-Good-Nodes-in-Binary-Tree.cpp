@@ -12,20 +12,23 @@
 class Solution {
 public:
 
-    //int good = 0;
+
     int goodNodes(TreeNode* root) {
         return countGood(root, INT_MIN);
-     ///   return good;
+
     }
     int countGood(TreeNode* node, int currentMax){
-        if(node == nullptr){
-            return 0;
+        if(node != nullptr){
+            int localMax = std::max(currentMax, node->val);
+            int count = (node->val >= currentMax) ? 1:0;
+
+           // int count = countGood(node->left, localMax) + countGood(node->right, localMax);
+            //if(node->val >= currentMax){
+            //    count+= 1;
+            //}
+            return count +countGood(node->left, localMax) + countGood(node->right, localMax);
         }
-        int count = countGood(node->left, std::max(currentMax, node->val)) + countGood(node->right, std::max(currentMax, node->val));
-        if(node->val >= currentMax){
-            count+= 1;
-        }
-        return count;
+        return 0;
         
     }
 };
