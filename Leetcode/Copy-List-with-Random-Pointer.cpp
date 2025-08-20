@@ -25,9 +25,11 @@ public:
         // A -> A' - > B - > B' -> nullptr Formation
 
         Node* prev = head;
+        Node* nextOriginal = nullptr;
+        Node * newNode = nullptr;
         while(prev != nullptr){
-            Node* newNode = new Node(prev->val);
-            Node* nextOriginal = prev->next;
+            newNode = new Node(prev->val);
+            nextOriginal = prev->next;
             prev->next = newNode;
             newNode->next = nextOriginal;
             prev = nextOriginal;
