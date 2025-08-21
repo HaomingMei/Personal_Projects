@@ -16,10 +16,10 @@ public:
         return lowest;
     }
     int search(TreeNode*node, TreeNode*p, TreeNode*q){
-        int count = 0;
         if(node == nullptr || lowest != nullptr){ // return instantly if lowest is no longer nullptr
             return 0;
         }
+        int count = 0;
         if(node->val == p->val || node->val == q->val){
             count += 1;
         }
