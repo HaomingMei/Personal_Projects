@@ -1,36 +1,23 @@
 class Solution {
 public:
     vector<int> countBits(int n) {
-        vector<int> ans(n+1);
-        int filled = 1;
+        int tracker = 1; // As we iterate from 1 to n, the tracker updates when the value is double. This means we will reuse the previous pattern but there would be an addition 1 because of the "double"
 
-        for(int i = n; i >= 1; i--){
-            int numOnes = 0;
-            int temp = i;
-            int rep = std::ceil(std::log2(i));
-            for (int j = 0; j <= rep ; j++){
-                if((temp&0x1) == 1){
-                    numOnes += 1;
-                }
-                temp>>=1;
+        // For example 2->4
+        // 010 to 100. The numbers from 4-7 are 3 bits, and will 
+        // Repeat everything before 100 101 110 111
+        // Note that 0->3 is 00 01 10 11
+        // Using this, we can take the value from before and add 1 to it
+
+        vector<int> try_it(n+1);
+        for(int i = 1; i <= n; i++)
+        {
+            if(i == (tracker * 2)){
+                tracker = i;
             }
-            temp = i;
-            for (int j = 0; j <= rep ; j++){
-                if(ans[temp] == 0 && temp !=0){
-                    ans[temp] = numOnes;
-                    filled +=1;
-                }
-                if((temp & 0x1)==1){
-                    numOnes-=1;
-                }
-                temp>>=1;
-                if(filled == n+1){
-                    return ans;
-                }
-            }
-            
-           // ans.push_back(numOnes);
+            // Tracker will shift it to the corresponding sequence we repeat
+            try_it[i] = try_it[i-tracker] + 1; // +1 because of the new 1 in front
         }
-        return ans;
+        return try_it;
     }
 };
