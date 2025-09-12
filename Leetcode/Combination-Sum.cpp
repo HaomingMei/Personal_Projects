@@ -1,38 +1,32 @@
 class Solution {
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<vector<int>> ans;
+        // Revisit 3 (Practice)
         vector<int> comb;
+        vector<vector<int>> ans;
         solve(ans, comb, candidates, target, 0);
         return ans;
-
-
         
     }
-    void solve(vector<vector<int>> & ans, vector<int> & comb, vector<int> & candidates, int target, int index){
-        // Base Case 1: Exceeded target
-        if(target < 0){
-            return;
-        }
-        else if(target == 0){
+
+    void solve(vector<vector<int>>& ans, vector<int>& comb, vector<int> & candidates, int target, int index){
+        if(target == 0){ // Combination Sum reached the target
             ans.push_back(comb);
             return;
         }
-        // Base Case 2: No one elements to choose from
-        if(index >= candidates.size()){
+        else if(target < 0){ // Overshoot, return
             return;
         }
 
-        // Choice 1: Reusing the same one
-        comb.push_back(candidates[index]);
-        solve(ans, comb, candidates, target-candidates[index], index); 
+        if (index == candidates.size()){
+            return;
+        }
 
-        // Choice 2: Skipping the current
-        //if(index + 1 >= candidates.size()){ // can't do that cause we need index == candidates sometimes to push comb to ans
-          //  return;
-        //}
-        comb.pop_back();
-        solve(ans, comb, candidates, target, index+1);
+        comb.push_back(candidates[index]); // Choice 1: Include the current
+        solve(ans, comb, candidates, target-candidates[index], index);
+
+        comb.pop_back(); // Choice 2: Skip the current
+        solve(ans, comb, candidates, target, index + 1);
 
     }
 };
