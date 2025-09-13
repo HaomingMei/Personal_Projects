@@ -1,71 +1,43 @@
 class Solution {
 public:
     vector<vector<string>> partition(string s) {
-        vector<vector<std::string>> ans;
+        // Leetcode Review: 2 (need to learn DP)
         vector<std::string> part;
-        //std::string temp(1, s[0]);
-        //part.push_back(temp);
-        solve(ans, s, part, 0);
-        return ans; 
+        vector<vector<std::string>> ans;
+        solve(part, ans, s, 0);
+        //std::cout << s.size() << std::endl;
+        return ans;
     }
-    void solve(vector<vector<std::string>>& ans, string s, vector<std::string>& part, int index){
-        // Base cases:
-        // Check palidrome
-       // if(!part.empty() && checkPalindrome(part.back()) == false){
-         //   return;
-        //}
-        if(index == s.size()){
+    void solve( vector<std::string>&part, vector<vector<std::string>>&ans, string s, int index){
+        if(index >= s.size()){
             ans.push_back(part);
             return;
         }
 
-        // Decisions : Append to the current index in part, or append as a new string
-      //  std::cout << "Pass 1 " << std::endl;
-        // Start a new one
-       // part.push_back(string(1, s[index]));
 
-        //if (checkPalindrome(part.back())) {
-          //  solve(ans, s, part, index+1);
-        //}
-        //part.pop_back();
-
-        //if(!part.empty()){
-          //  string old = part.back();
-           // part.back() += string(1,s[index]);
-            //if (checkPalindrome(part.back())) {
-              //  solve(ans, s, part, index+1);
-            //}
-            //part.back() = old;
-        //}
-
-
-
-        // Use the existing one
-         for (int i = index; i < s.size(); i++) {
-            string sub = s.substr(index, i - index + 1);
-            if (checkPalindrome(sub)) {
-                part.push_back(sub);
-                solve(ans, s, part, i+1);
+        for (int i = index; i < s.size(); i++){
+            string temp = s.substr(index, i - index + 1);
+            if(checkPalidrome(temp) == true){
+                part.push_back(temp);
+                solve(part, ans, s, i+1); // Right most character of string + 1 for the next char
                 part.pop_back();
             }
         }
-
     }
-
-    bool checkPalindrome(string s){
-        int length = s.size();
+    bool checkPalidrome(string temp){
         int left = 0;
-        int right = length -1;
-       //std::cout << "Hi " << std::endl;
-        while(left < right){
-            if(s[left] != s[right]){
+        int right = temp.size()- 1;
+        while(left<= right){
+            if(left == right){
+                return true;
+            }
+            if(temp[left] != temp[right]){
                 return false;
             }
-            left+= 1;
+            left += 1;
             right -=1;
-           // std::cout << "Pass 3 " << std::endl;
+
         }
-        //std::cout << "Pass 4 " << std::endl;
         return true;
     }
 };
