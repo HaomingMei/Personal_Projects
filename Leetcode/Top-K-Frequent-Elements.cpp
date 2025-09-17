@@ -1,34 +1,20 @@
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
-        std::unordered_map<int, int> map;
-        std::priority_queue<pair<int,int>> pq;
-        std::vector<int> resultVector;
-        
-        for(auto numbers : nums)
-        {
-            auto search = map.find(numbers);
-            if(search != map.end())
-            {
-                search->second = search->second + 1;
-                
+        vector<int> ans;
+        unordered_map<int,int> map; // Represents the value and its rep
+        int numSize = nums.size();
+        for(int i = 0; i <numSize; i++){
+            map[nums[i]] ++;
+        }
+        vector<pair<int,int>> items(map.begin(), map.end()); // Copy from hashmap to vector
 
-            }
-            else{
-                map.insert({numbers, 1});
-            }
-            
+        std::sort(items.begin(), items.end(), [](const pair<int,int> &a, const pair<int,int> &b){
+            return a.second > b.second;
+        });
+        for(int j = 0; j<k; j++){ // insert k times
+            ans.push_back(items[j].first);
         }
-        // Repeat k times
-        for(auto nums: map)
-        {   // Number of repetition is the index, value is the number
-            pq.push({nums.second, nums.first});
-        }
-        for(int i = 0; i<k; i++)
-        {
-            resultVector.push_back(pq.top().second);
-            pq.pop();
-        }
-        return resultVector;
+        return ans;
     }
 };
