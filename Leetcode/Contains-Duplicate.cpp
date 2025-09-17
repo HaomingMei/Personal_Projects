@@ -1,22 +1,14 @@
-#include <iostream>
-#include <unordered_set>
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
-        std::unordered_set<int> mySet;
-        for(auto n : nums)
-        {
-            if(mySet.find(n) != mySet.end())
-            {
+        // Need to keep track of the freq  of the num
+        unordered_map<int,int> map;
+        for(int i = 0; i<nums.size(); i++){
+            if(map[nums[i]] >=1){
                 return true;
             }
-            else{
-                mySet.emplace(n);
-                
-            }
+            map[nums[i]] ++;
         }
         return false;
-
-        
     }
 };
