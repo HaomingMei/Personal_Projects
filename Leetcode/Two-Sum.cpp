@@ -1,27 +1,40 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        std::unordered_map<int, int> num;
-        // First value is the number, second is the index
-        std::vector<int> resultVector;
-        for(int i =0; i<nums.size(); i++)
-        {
-            resultVector.push_back(i);
-            auto search = num.find(target-nums[i]);
-            if(search != num.end())
-            {
-                resultVector.push_back(search->second);
-                return resultVector;
-
-            }
-            else{
-                resultVector.pop_back();
-                num.insert({nums[i],i}); 
-                // Insert value and index pair
-            }
-            
+        vector<int> ans;
+        int left, right, mid;
+        int val;
+        vector<std::pair<int, int>> temp; // Keeps track of the value and the index
+        for(int i = 0; i < nums.size(); i++){
+            temp.push_back({nums[i],i});
         }
+        std::sort(temp.begin(), temp.end());
 
-        return resultVector;
+        for(int i = 0 ; i + 1 < temp.size(); i ++ ){
+            left = i + 1;
+            right = temp.size() - 1;
+            mid = (left+right)/2;
+            val = temp[i].first;
+            ans.push_back(temp[i].second);
+            while(left<= right && left < temp.size() && right < temp.size()){
+                int sum = val + temp[mid].first;
+                if(sum == target){
+                    ans.push_back(temp[mid].second);
+                    return ans;
+                }
+                else if(sum < target){
+                    left = mid + 1;
+
+                }
+                else{
+                    right = mid - 1;
+                }
+                mid = (left+right)/2;
+
+            }
+            ans.pop_back();
+
+        }
+        return ans;
     }
 };
