@@ -12,32 +12,28 @@
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
-        //Review
         vector<int> ans;
-        stack<TreeNode*> st;
-
+        std::stack<TreeNode*> st;
         TreeNode* curr = root;
-
-        while(curr != nullptr || !st.empty()){
-            if(curr != nullptr){
+        while(curr!= nullptr || !st.empty()){
+            if(curr!=nullptr){
                 st.push(curr);
                 curr = curr ->left;
             }
             else{
-                TreeNode* temp = st.top();
-                if(temp ->right != nullptr)
-                {
-                    curr = temp->right;
-                    temp ->right = nullptr; // Make it nullptr, so next time we add the "temp" node to the traversed list
+                if(st.top()->right != nullptr){
+                    curr = st.top()->right;
+                    st.top()->right = nullptr; // set to nullptr so we don't re process
+
                 }
                 else{
+                    ans.push_back(st.top()->val);
+                    curr = st.top()->right; // set to nullptr so it comes back to else case
                     st.pop();
-                    ans.push_back(temp->val);
-                    curr = temp->right;
-
+                   // st.top()->right = nullptr;
                 }
             }
-
+           
         }
         return ans;
     }
