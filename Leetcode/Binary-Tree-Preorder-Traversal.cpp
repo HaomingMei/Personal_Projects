@@ -12,18 +12,18 @@
 class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
-        // Review
         vector<int> ans;
-        stack<TreeNode*> st;
+        std::stack<TreeNode*> st;
         TreeNode* curr = root;
+
+
         while(curr!= nullptr || !st.empty()){
             if(curr!= nullptr){
-                ans.push_back(curr->val);
                 st.push(curr);
-                curr=curr->left;
+                ans.push_back(curr->val);
+                curr = curr->left;
             }
             else{
-                //curr = st.top();
                 curr = st.top()->right;
                 st.pop();
             }
