@@ -18,38 +18,24 @@ public:
     }
 };
 */
-#include <stdbool.h>
+
 class Solution {
 public:
+    unordered_map<Node*, Node*> map; // Tracks if Original Node has a Clone already
     Node* cloneGraph(Node* node) {
-        if (node == nullptr){
-            return nullptr;
+        if(node == nullptr){
+            return nullptr; // Edge case
         }
-        queue<Node*> q;
-        unordered_map<Node*, Node*> map; // Keeps track of the visited
-        q.push(node);
-        //map[node->val] = true;
-        map[node]= new Node(node->val); // map to its clone
-        //queue<Node*> q2;
-       // q2.push(newHead);
-
-        while(!q.empty() ){
-     
-            Node* currNode =  q.front();
-            q.pop();
-
-            for(auto neigh: currNode->neighbors){
-                if(map.find(neigh) == map.end()){ // not cloned
-                    map[neigh] = new Node(neigh->val);
-                    q.push(neigh);
-                }
-                map[currNode]->neighbors.push_back(map[neigh]); // add to the cloned' neighbors
-            }
-
-
+        if(map.find(node) != map.end()){ // Case if the clone already exist
+            return map[node]; // Return the clone if so
         }
-        return map[node];
+        // Else, create the clone
+        Node* curr = new Node(node->val); 
+        map[node] = curr; // Map it
+
+        for(auto neigh:node->neighbors){
+            curr->neighbors.push_back(cloneGraph(neigh));
+        }
+        return curr; 
     }
-
-
 };
