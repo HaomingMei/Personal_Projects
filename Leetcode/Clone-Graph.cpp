@@ -26,10 +26,10 @@ public:
             return nullptr;
         }
         queue<Node*> q;
-        unordered_map<int, Node*> map; // Keeps track of the visited
+        unordered_map<Node*, Node*> map; // Keeps track of the visited
         q.push(node);
         //map[node->val] = true;
-        map[node->val]= new Node(node->val); // map to its clone
+        map[node]= new Node(node->val); // map to its clone
         //queue<Node*> q2;
        // q2.push(newHead);
 
@@ -37,17 +37,18 @@ public:
      
             Node* currNode =  q.front();
             q.pop();
+
             for(auto neigh: currNode->neighbors){
-                if(map.find(neigh->val) == map.end()){ // not cloned
-                    map[neigh->val] = new Node(neigh->val);
+                if(map.find(neigh) == map.end()){ // not cloned
+                    map[neigh] = new Node(neigh->val);
                     q.push(neigh);
                 }
-                map[currNode->val]->neighbors.push_back(map[neigh->val]); // add to the cloned' neighbors
+                map[currNode]->neighbors.push_back(map[neigh]); // add to the cloned' neighbors
             }
 
 
         }
-        return map[node->val];
+        return map[node];
     }
 
 
