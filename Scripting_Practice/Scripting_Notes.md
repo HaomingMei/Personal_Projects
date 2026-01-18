@@ -27,6 +27,9 @@ Expect Unclean ata
     - Correction
 - plot_data
 
+## When do I use CSV vs pandas
+- CSV are low-level, it's generic and for simple data
+- Pandas are used when convience matters more, since vectorization and column operations are available using pandas
 
 
 

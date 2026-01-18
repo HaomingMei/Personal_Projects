@@ -14,17 +14,22 @@ def data_load(filepath):
     ay = []
     az = []
 
-    with open(filepath, 'r') as f:
+    with open(filepath, 'r') as f: #
         print(type(f))
 
     print('Test')
 
     return timestamps, ax, ay, az
+def validate_data(timestamps, ax, ay, az):
+
+    return
 def main(): 
-    #* Load the Data from the file
+    #! Step 1: Load the Data from the file
         #* Define the path to file
     filepath = "data/imu.csv"
     timestamps, ax, ay, az = data_load(filepath)
-
+    #! Step 2: Validate the Data 
+        #* Drop Invalid/Out of range data
+    validate_data(timestamps, ax, ay, az)
 if __name__ == "__main__":
     main()
