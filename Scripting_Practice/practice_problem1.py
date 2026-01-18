@@ -87,8 +87,25 @@ def validate_data(timestamps, ax, ay, az):
     return timestamps, ax, ay, az
 
 def process_data(timestamps, ax, ay, az):
+    #* Step 1: Unit Conversion
 
+    #* Bias & Bias Correction
+
+    #* Applying Filters
+
+    #* Extracting Features
+    # RMS noise per axis
+    # Peak-to-peak noise
+    # Standard deviation
+    # FFT (optional)
     return timestamps, ax, ay, az
+
+def plot_data():
+
+    # Raw vs corrected vs filtered (same axis)
+    # Histogram of noise
+    # FFT magnitude
+    return
 def main(): 
     #! Step 1: Load the Data from the file
         #* Define the path to file
@@ -101,5 +118,6 @@ def main():
         #* Apply correction, filters, or conversion
     timestamps, ax, ay, az = process_data(timestamps, ax, ay, az)
     #! Step 4: Plot the Data
+    plot_data()
 if __name__ == "__main__":
     main()
