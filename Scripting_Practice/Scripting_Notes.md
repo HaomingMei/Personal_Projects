@@ -3,6 +3,7 @@
 - Data Cleaning
 - Analysis
 - Visualization
+- Calibration
 - Automation
 - Note: Use MATLAB for signal processing
 - Plot/Visualization Notes:
@@ -31,5 +32,5 @@ Expect Unclean ata
 - CSV are low-level, it's generic and for simple data
 - Pandas are used when convience matters more, since vectorization and column operations are available using pandas
 
-
+## Json?
 
